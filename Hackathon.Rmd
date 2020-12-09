@@ -34,6 +34,8 @@ us_crime_2018 <- read_csv("data/us_crime_2018.csv")
 
 ```
 
+# Mapping out stadiums:
+
 ```{r}
 
 leaflet(stadium_coords) %>%
@@ -42,6 +44,7 @@ leaflet(stadium_coords) %>%
              label = stadium_coords$stadium_name)
 ```
 
+# Pre-processing/data cleaning:
 
 ```{r}
 
@@ -50,6 +53,8 @@ retrosheet_gl_2018 %>%
   mutate(date = lubridate::ymd(date))
   
 ```
+
+## From David:
 
 ```{r}
 Dodgers_games <- read_csv("data/Dodgers_games.csv")
