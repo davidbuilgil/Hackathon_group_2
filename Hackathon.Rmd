@@ -1,0 +1,64 @@
+---
+title: "Hackathon"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Loading libraries:
+
+```{r}
+library(tidyverse)
+library(tidymodels)
+library(leaflet)
+library(sf)
+```
+
+# Loading data:
+
+```{r}
+
+cali_nhood_safegraph <- read_csv("data/cali_nhood_safegraph.csv")
+
+la_cb <- read_csv("data/la_cb.csv")
+
+la_crime_june <- read_csv("data/la_crime_june.csv")
+
+retrosheet_gl_2018 <- read_csv("data/retrosheet_gl_2018.csv")
+
+stadium_coords <- read_csv("data/stadium_coords.csv")
+
+us_crime_2018 <- read_csv("data/us_crime_2018.csv")
+
+```
+
+```{r}
+
+leaflet(stadium_coords) %>%
+  addTiles() %>%
+  addMarkers(lat= stadium_coords$y, lng= stadium_coords$x,
+             label = stadium_coords$stadium_name)
+```
+
+
+```{r}
+
+retrosheet_gl_2018 %>%
+  filter(name == "Dodger Stadium") %>%
+  mutate(date = lubridate::ymd(date))
+  
+```
+
+```{r}
+Dodgers_games <- read_csv("data/Dodgers_games.csv")
+
+Dodgers_games %>%
+  transmute(Game,
+            date = lubridate::mdy(`Date / Box Score`),
+            Score,
+            Decision,
+            Record)
+```
+
