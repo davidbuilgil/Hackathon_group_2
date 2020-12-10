@@ -5,6 +5,8 @@ library(tidyverse)
 library(here)
 library(vroom)
 library(broom)
+library(forcats)
+library(binom)
 
 set.seed(nchar("take me to the ballgame") ^ 4)
 
@@ -245,6 +247,27 @@ draws_df %>%
   theme_minimal()
 
 
+# crime types near and far from stadium -----------------------------------
 
-  
 
+prop_cis <- 
+crime_buffer %>% 
+  select(within_5k_buffer:family) %>% 
+  select(-dui, -drug) %>% 
+  group_by(within_5k_buffer) %>% 
+  summarise_at(vars(crimes:family), ~ sum(.x)) %>% 
+  mutate(crimes = rowSums(select(., arson:family))) %>% 
+  gather(crime, n , arson:family) %>% 
+  mutate(prop = map2(n, crimes, binom::binom.wilson)) %>% 
+  unnest()
+
+prop_cis %>% 
+  ggplot(aes(x = mean, y = fct_reorder(crime, mean), colour = factor(within_5k_buffer))) +
+  geom_point() +
+  geom_errorbarh(aes(xmin = lower, xmax = upper),height = 0.23) +
+  labs(x = "Proportion of all crimes",
+       y = "Crime type",
+       colour = "Within\n5k of\nstadium",
+       title = "Close to Dodger stadium assaults are relatively more common",
+       subtitle = "And vehicle thefts less common") +
+  theme_minimal()
