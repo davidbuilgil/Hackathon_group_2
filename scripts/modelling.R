@@ -125,6 +125,7 @@ new_df <- unnest(new_df)
 preds <- 
 broom::augment(
   mod1,
+  se_fit = TRUE,
   newdata = new_df
 )
 
@@ -207,6 +208,7 @@ new_df_g <- unnest(new_df_g)
 preds_g <- 
   broom::augment(
     game_mod,
+    se_fit = TRUE,
     newdata = new_df_g
   )
 
